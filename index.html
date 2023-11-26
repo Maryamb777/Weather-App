@@ -13,6 +13,9 @@
         <input type="text" placeholder="Enter City Name" spellcheck="false">
         <button><img src="images/search.png" alt=""></button>
     </div>
+    <div class="error">
+        <p>Invalid City Name</p>
+    </div>
     <div class="Weather">
         <img src="images/rain.png" class="weather-icon">
         <h1 class="temp">22° C</h1>
@@ -45,7 +48,12 @@ const weatherIcon = document.querySelector(".weather-icon");
 
 async function checkWeather(city){
     const response = await fetch(apiUrl + city + '&appid=$apiKey');
-    var data = await response.json();
+
+    if(response.status == 404){
+        document.querySelector('.error').style.display = "block";
+        document.querySelector('.weather').style.display = "none";
+    }else{
+        var data = await response.json();
 
     console.log(data);
 
@@ -70,9 +78,14 @@ async function checkWeather(city){
         weatherIcon.src = "images/mist.png";
     }
 
-searchBtn.addEventListener('click', function(){
+    document.querySelector('.weather').style.display = "block";
+    document.querySelector('.error').style.display = "none";
+
+    }
+    searchBtn.addEventListener('click', function(){
     checkWeather(searchBox.value);
-});
+    });
+}
 
 </script>
 
